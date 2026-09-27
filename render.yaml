@@ -1,0 +1,30 @@
+services:
+  - type: web
+    name: military-asset-management-api
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CLIENT_URL
+        sync: false
+      - key: ADMIN_EMAIL
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: BASE_COMMANDER_EMAIL
+        sync: false
+      - key: BASE_COMMANDER_PASSWORD
+        sync: false
+      - key: LOGISTICS_EMAIL
+        sync: false
+      - key: LOGISTICS_PASSWORD
+        sync: false
