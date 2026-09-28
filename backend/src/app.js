@@ -8,29 +8,10 @@ const operationsRoutes = require("./routes/operationsRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 
 const app = express();
-const defaultAllowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:5174",
-  "http://127.0.0.1:5173",
-  "http://127.0.0.1:5174"
-];
-const configuredOrigins = (process.env.CLIENT_URL || "").split(",").map((origin) => origin.trim()).filter(Boolean);
-const allowedOrigins = Array.from(new Set([...defaultAllowedOrigins, ...configuredOrigins]));
-const isAllowedOrigin = (origin) => {
-  if (!origin) return true;
-  if (allowedOrigins.includes(origin)) return true;
-  if (/^https?:\/\/localhost(?::\d+)?$/.test(origin)) return true;
-  if (/^https?:\/\/127\.0\.0\.1(?::\d+)?$/.test(origin)) return true;
-  if (/^https?:\/\/[\w.-]+\.(vercel\.app|onrender\.com|render\.com)(?::\d+)?$/.test(origin)) return true;
-  return false;
-};
 
 app.disable("x-powered-by");
 app.use(cors({
-  origin: (origin, callback) => {
-    if (isAllowedOrigin(origin)) return callback(null, true);
-    callback(new Error("Origin is not allowed by CORS"));
-  },
+  origin: true,
   credentials: true
 }));
 app.use(express.json({ limit: "100kb" }));

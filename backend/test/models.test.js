@@ -73,7 +73,7 @@ test("health endpoint responds without a database dependency", async (context) =
 
 test("CORS allows configured and localhost-style frontend origins", async (context) => {
     const previousClientUrl = process.env.CLIENT_URL;
-    process.env.CLIENT_URL = "https://military-asset-management-tree-io.vercel.app";
+    process.env.CLIENT_URL = "https://military-asset-management-three-iota.vercel.app/";
     delete require.cache[require.resolve("../src/app")];
     const appWithCors = require("../src/app");
     const server = appWithCors.listen(0);
@@ -87,7 +87,7 @@ test("CORS allows configured and localhost-style frontend origins", async (conte
         delete require.cache[require.resolve("../src/app")];
     });
     await new Promise((resolve) => server.once("listening", resolve));
-    const origin = "https://military-asset-management-tree-io.vercel.app";
+    const origin = "https://military-asset-management-three-iota.vercel.app";
     const response = await fetch(`http://127.0.0.1:${server.address().port}/api/health`, {
         headers: { Origin: origin }
     });
