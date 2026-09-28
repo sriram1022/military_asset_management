@@ -70,3 +70,26 @@ test("health endpoint responds without a database dependency", async (context) =
     assert.equal(response.status, 200);
     assert.deepEqual(await response.json(), { status: "ok" });
 });
+
+test("CORS allows configured and localhost-style frontend origins", async (context) => {
+    const previousClientUrl = process.env.CLIENT_URL;
+    process.env.CLIENT_URL = "https://military-asset-management-tree-io.vercel.app";
+    delete require.cache[require.resolve("../src/app")];
+    const appWithCors = require("../src/app");
+    const server = appWithCors.listen(0);
+    context.after(() => {
+        server.close();
+        if (previousClientUrl === undefined) {
+            delete process.env.CLIENT_URL;
+        } else {
+            process.env.CLIENT_URL = previousClientUrl;
+        }
+        delete require.cache[require.resolve("../src/app")];
+    });
+    await new Promise((resolve) => server.once("listening", resolve));
+    const origin = "https://military-asset-management-tree-io.vercel.app";
+    const response = await fetch(`http://127.0.0.1:${server.address().port}/api/health`, {
+        headers: { Origin: origin }
+    });
+    assert.equal(response.headers.get("access-control-allow-origin"), origin);
+});
